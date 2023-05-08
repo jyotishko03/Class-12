@@ -1,0 +1,256 @@
+'''import mysql.connector as c
+mycon=c.connect(host='localhost', user='root', passwd='', database='comp_project')
+cur=mycon.cursor()'''
+
+credential={'Jyotishko':'ok', 'Saptarshi':'de'}#User ID: password
+
+def displaytable(table):
+    cur.execute('select*from '+ table)
+    b=cur.fetchall()
+    for i in b:
+        print(i)
+def addt():
+    name=input('Name: ')
+    code=input('Code: ')
+    sub=input('Subject: ')
+    post=input('Post: ')
+    mob=int(input('Mobile no.: '))
+    salary=int(input('Salary: '))
+    cur.execute('insert into teacher values (%s, %s, %s, %s, %s)',(code, name, sub, post, mob))
+    cur.execute('insert into salary values (%s, %s, %s, %s)',(code, name, salary, 'due'))
+
+def ps():
+    d=input('Enter code')
+    print("Salary has been sent to teacher's registered bank account")
+    cur.execute('update salary set status="Paid" where code="'+d+'"')
+
+
+
+
+
+
+
+
+
+
+
+def adst():
+    
+    ad=input("Enter admission number of student ")
+    n=input("Enter name of student")
+    c=input("Enter class of student")
+    s=input("Enter section of student")
+    r=input("Enter roll number of student")
+    m=input("Enter mobile number of student")
+    data=(ad,n,c,s,r,m)
+    data2=(ad,n,'due')
+    sqler='insert into student values(%s,%s,%s,%s,%s,%s)'
+    sqler2='insert into fees values(%s,%s,%s)'
+    cur.execute(sqler,data)
+    cur.execute(sqler2,data2)
+
+    print("Thank you.Your data has been entered successfully")
+    
+def remvst():
+    ad=input("Enter admission number ")
+    cur.execute('delete from student where AdmNo="'+ad+'"')
+    cur.execute('delete from fees where AdmNo="'+ad+'"')
+    print('Student has been removed from list')
+    
+def dispcl():
+    table='student'
+    cur.execute('select*from '+ table)
+    b=cur.fetchall()
+    for i in b:
+        print(i)    
+   
+def sfs():
+    adm=input('Enter admission number of the student')
+    print("Salary has been paid for the mentioned student")
+    cur.execute('update fees set status="Paid" where AdmnNo="'+adm+'"')
+    
+def dispsa():
+    table='fees'
+    cur.execute('select*from '+ table)
+    b=cur.fetchall()
+    for i in b:
+        print(i)
+    
+def atdnc():
+    inp=input('Enter class')
+    att=input("Enter date")
+    dat=input('Enter roll no.s of students absent separated by space')
+    data=(inp,att,dat)
+    sqler='insert into Sattendance values(%s,%s,%s)'
+    print('Data entered successfully')
+    
+def attwar():
+    inp=input('Enter admission number')
+    print('Warning sent to mentioned student regarding low attendance')
+    
+def feewar():
+    inp=input('Enter admission number')
+    print('Warning sent to mentioned student regarding due fees')
+    
+
+def main():
+    while True:
+        print('''         
+                         1.ADD STUDENT
+                         2.DISPLAY CLASS
+                         3.REMOVE STUDENT
+                         
+                         4.STUDENT FEE STATUS
+                         5.DISPALY FEES STATUS
+
+                         6.CLASS ATTENDANCE
+                         7.SEND WARNING FOR LOW ATTENDANCE
+
+                         8.SEND WARNING FOR DUE FEES
+                         
+                         9.Return to Main Menu
+                PRESS THE RESPECTIVE KEY FOR USUING THE FUNCTIONS''')
+        ch=input("Enter choice")
+        if (ch=='1'):
+            adst()
+        elif (ch=='2'):
+            dispcl()
+        elif (ch=='3'):
+            remvst()
+        elif (ch=='4'):
+            print('Facility Temporarily Down')
+        elif(ch=='5'):
+            dispsa()
+        elif(ch=='6'):
+            atdnc()
+        elif(ch=='7'):
+            attwar()
+        elif(ch=='8'):
+            feewar()
+        elif(ch=='9'):
+            break
+        else:
+            print('Please enter a valid choice')
+            continue
+
+
+
+
+
+
+
+    
+def main2():
+    while True:
+        
+
+        print('''
+
+
+                    1. ADD TEACHER
+                    2. DISPLAY TEACHER'S LIST
+                    3. REMOVE TEACHER
+                    
+                    4. PAY SALARY
+                    5. CHECK SALARY STATUS
+
+                    6. Return to Main Menu''')
+        a=input('Enter option Number')
+        if a=='6':
+             break
+        elif a not in ('1','2','3','4','5'):
+            print('wrong option')
+            continue
+
+        elif a=='1':
+            addt()
+
+        elif a=='2':
+            displaytable('teacher')
+        elif a=='3':
+            e=input('Enter code')
+            cur.execute('delete from teacher where code="'+e+'"')
+            cur.execute('delete from salary where code="'+e+'"')
+            print('Teacher has been removed from list')
+
+        elif a=='4':
+            ps()
+        elif a=='5':
+            displaytable('salary')
+
+def New_User(n):
+    p=input('Set password: ')
+    credential[n]=p
+    print('New User registered')
+
+
+
+
+def main_menu():
+    while True:
+        
+        print('''A) Teacher's Corner
+B) Student's Corner
+C) Logout''')
+        choice=input('Enter Option Code')
+        if choice=='A':
+            main2()
+        if choice=='B':
+            main()
+        if choice=='C':
+            break
+    
+
+
+
+
+
+while True:
+    print('''
+
+
+
+1.Login
+2. New User Register
+3. Exit''')
+    f=input('Enter option number')
+    if f not in ('1','2','3'):
+        print('Wrong option')
+    elif f=='1':
+        ID=input('ID: ')
+        if ID in credential:
+            password=input('Enter password')
+            if password==credential[ID]:
+                main_menu()
+            else:
+                print('Wrong password, retry')
+                password=input('Enter password')
+                if password==credential[ID]:
+                    main_menu()
+                else:
+                    print('Wrong password, retry')
+                    password=input('Enter password')
+                    
+                    if password==credential[ID]:
+                        main_menu()
+                    else:
+                        print('Wrong password, relogin')
+                        continue
+        elif ID not in credential:
+            print('New user? Try registering')
+            continue
+    elif f=='2':
+        while True:
+            idn=input('ID: ')
+            if idn in credential:
+                print('ID exits already')
+                continue
+            New_User(idn)
+            break
+    elif f=='3':
+        break
+        
+        
+            
+    
+mycon.close()
